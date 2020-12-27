@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO list</title>
+    <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Todo List</h1>
+    </header>
+    <main>
+        <section class="input-area">
+            <ion-icon class="icon" id="selectAll" name="ios-checkmark-circle-outline"></ion-icon>
+            <input class="text-input" id="input" placeholder="What needs to be done?" />
+            <button class="button" id="addButton">Add</button>
+        </section>
+
+        <section>
+            <ul id="list" class="list-container">
+            </ul>
+        </section>
+        <footer class="footer-container">
+            <p id="p1">0 items left</p>
+            <div class="selection">
+                <button id="allItem">All</button>
+                <button id="activeItem">Active</button>
+                <button id="completedItem">Completed</button>
+            </div>
+            <button class="button" id="clearButton">Clear all</button>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+</body>
+
+</html>

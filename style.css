@@ -55,6 +55,8 @@ main {
 
 .edit-input {
     flex-grow: 1;
+    height: 28px;
+    width: 90%;
     border: none;
     padding: 4px;
     font-size: 1.5rem;

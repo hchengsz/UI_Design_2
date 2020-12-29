@@ -27,6 +27,7 @@ function addNewTask() {
 
     model.todoList.push(newTodo);
     model.storeList = model.todoList;
+    localStorage.setItem("storeList", JSON.stringify(model.storeList));
     updateView();
 }
 
@@ -40,12 +41,14 @@ function editTask(id) {
             todo.value = inputValue;
         }
     });
+    localStorage.setItem("storeList", JSON.stringify(model.storeList));
     updateView();
 }
 
 function deleteAllTasks() {
     model.todoList = [];
     model.storeList = [];
+    localStorage.setItem("storeList", JSON.stringify(model.storeList));
     updateView();
 }
 
@@ -59,6 +62,7 @@ function deleteTaskById(id) {
         return todo.id !== id;
     });
     model.storeList = filteredList2;
+    localStorage.setItem("storeList", JSON.stringify(model.storeList));
     updateView();
 }
 
@@ -77,7 +81,7 @@ function editTaskById(id) {
             listContainer.appendChild(liNode2);
         }
     });
-
+    return;
 }
 
 function toggleTaskById(id) {
@@ -90,6 +94,7 @@ function toggleTaskById(id) {
         }
     });
     model.todoList = newList;
+    localStorage.setItem("storeList", JSON.stringify(model.storeList));
     updateView();
 }
 
@@ -188,11 +193,12 @@ function createEditNode(value, checked, id) {
     input.disabled = true;
 
     const span = document.createElement("span");
-    span.innerHTML = `<input class="edit-input" value=${value} />`;
+    span.innerHTML = `<input class="edit-input" id="editInput" value=${value} />`;
 
     const div = document.createElement("div");
     div.innerHTML = "&#10003;";
     div.classList.add("check-icon");
+    div.id = "checkIcon"
 
     li.appendChild(input);
     li.appendChild(span);
@@ -248,16 +254,24 @@ function handleContainerClick(e) {
         return;
     }
 
+    if (target.classList.contains("edit-input")) {
+        if (e.keyCode === 13) {
+            document.getElementById("checkIcon").click();
+        }
+        return;
+    }
+
     if (target.classList.contains("edit-icon")) {
-        // target is the edit icon div
         const li = target.parentNode;
         const taskId = li.id;
         editTaskById(taskId);
+        const editInput = document.getElementById("editInput")
+        editInput.focus();
+        editInput.selectionStart = editInput.selectionEnd = editInput.value.length;
         return;
     }
 
     if (target.classList.contains("check-icon")) {
-        // target is the edit icon div
         const li = target.parentNode;
         const taskId = li.id;
         editTask(taskId);
@@ -288,18 +302,23 @@ function handleContainerClick(e) {
 }
 
 function loadEvents() {
+    model.storeList = JSON.parse(localStorage.getItem("storeList"));
+    model.todoList = model.storeList;
+    updateView()
+
     const addButton = document.querySelector("#addButton");
     const clearAllButton = document.querySelector("#clearButton");
     const listContainer = getListContainer();
     const inputLine = document.getElementById("input");
     const selectForAll = document.querySelector("#selectAll");
+    const allItem = document.querySelector("#allItem");
     const activeItem = document.querySelector("#activeItem");
     const completedItem = document.querySelector("#completedItem");
-    const allItem = document.querySelector("#allItem");
 
     addButton.addEventListener("click", addNewTask);
     clearAllButton.addEventListener("click", deleteAllTasks);
     listContainer.addEventListener("click", handleContainerClick);
+    listContainer.addEventListener("keyup", handleContainerClick);
     inputLine.addEventListener("keyup", handleContainerClick);
     selectForAll.addEventListener("click", handleContainerClick);
     activeItem.addEventListener("click", showActiveItem);
